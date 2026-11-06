@@ -1,0 +1,42 @@
+{
+  "python": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+  "checks": {
+    "dependencies": {
+      "passed": true,
+      "output": "No broken requirements found.\n"
+    },
+    "unit_tests": {
+      "passed": true,
+      "output": "test_model (test_pipeline.TestPipeline.test_model) ... ok\ntest_real_file (test_pipeline.TestPipeline.test_real_file) ... ok\ntest_risk_levels (test_pipeline.TestPipeline.test_risk_levels) ... ok\ntest_timing (test_pipeline.TestPipeline.test_timing) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.080s\n\nOK\n"
+    },
+    "dashboard_execution": {
+      "passed": true,
+      "detail": "Both prediction timings rendered and executed sample inference with Streamlit AppTest."
+    },
+    "streamlit_server": {
+      "passed": true,
+      "health_status": 200,
+      "health_body": "ok",
+      "homepage_status": 200,
+      "port": 8507,
+      "stopped_after_check": true
+    }
+  },
+  "models": {
+    "enrollment": {
+      "passed": true,
+      "test_rows": 726,
+      "roc_auc": 0.8549088649544325,
+      "accuracy": 0.7644628099173554,
+      "model": "logistic_regression"
+    },
+    "after_first_semester": {
+      "passed": true,
+      "test_rows": 726,
+      "roc_auc": 0.9564160984003569,
+      "accuracy": 0.9132231404958677,
+      "model": "svm"
+    }
+  },
+  "dataset_sha256": "3ef126de5cefff26eb11fbb4237f1a1401cb64b488e2f1d598c23cedeb4c45ae"
+}

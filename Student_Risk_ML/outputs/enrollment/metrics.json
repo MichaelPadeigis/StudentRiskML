@@ -1,0 +1,63 @@
+{
+  "timing": "enrollment",
+  "chosen_model": "logistic_regression",
+  "choice_metric": "mean 5-fold training ROC-AUC",
+  "rows_total": 4424,
+  "rows_modelled": 3630,
+  "excluded_enrolled": 794,
+  "train_rows": 2904,
+  "test_rows": 726,
+  "feature_count": 24,
+  "features": [
+    "Marital status",
+    "Application mode",
+    "Application order",
+    "Course",
+    "Daytime/evening attendance",
+    "Previous qualification",
+    "Previous qualification (grade)",
+    "Nacionality",
+    "Mother's qualification",
+    "Father's qualification",
+    "Mother's occupation",
+    "Father's occupation",
+    "Admission grade",
+    "Displaced",
+    "Educational special needs",
+    "Debtor",
+    "Tuition fees up to date",
+    "Gender",
+    "Scholarship holder",
+    "Age at enrollment",
+    "International",
+    "Unemployment rate",
+    "Inflation rate",
+    "GDP"
+  ],
+  "dropout_count": 1421,
+  "graduate_count": 2209,
+  "test_dropout_count": 284,
+  "test_accuracy": 0.7644628099173554,
+  "test_precision": 0.672782874617737,
+  "test_recall": 0.7746478873239436,
+  "test_f1": 0.7201309328968903,
+  "test_roc_auc": 0.8549088649544325,
+  "test_average_precision": 0.8219392933507443,
+  "test_brier_score": 0.15709726946534,
+  "test_confusion_matrix": [
+    [
+      335,
+      107
+    ],
+    [
+      64,
+      220
+    ]
+  ],
+  "binary_threshold": 0.5,
+  "risk_thresholds": {
+    "moderate": 0.25,
+    "high": 0.6
+  },
+  "note": "Risk categories are illustrative. This predicts observed dropout, not verified academic support needs."
+}
