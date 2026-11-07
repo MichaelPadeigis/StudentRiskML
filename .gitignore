@@ -1,0 +1,21 @@
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.xdv
+*.run.xml
+*-blx.bib
+
+# Compiled report (rebuild from progress_report.tex)
+Progress_Report/progress_report.pdf
