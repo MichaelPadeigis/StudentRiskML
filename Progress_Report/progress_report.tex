@@ -163,7 +163,7 @@ The data file (\texttt{data.csv}, about 0.8\,MB) is included in our submission.
 
 Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
 
-\section{Implementation}
+\section{Implementation}\label{sec:implementation}
 
 We built a binary classifier to predict whether a student would drop out or graduate. We excluded students who were still enrolled because their final outcomes were not known. We tested two versions using the same train and test split. The enrollment version used 24 features available before semester results. The first-semester version used 30 features by adding six first-semester academic measures.
 We compared four scikit-learn models: logistic regression, a decision tree, a random forest, and a support vector machine (SVM). All four used balanced class weights, giving more weight to dropout cases because they were less common. Each model used a preprocessing pipeline that encoded categorical features and standardized numerical features. We fitted these transformations on the training portion of each fold to keep the validation data separate.
@@ -179,9 +179,25 @@ Enrollment logistic regression: 76.4\% accuracy, 0.855 ROC-AUC, 77.5\% dropout r
 First-semester SVM: 91.3\% accuracy, 0.956 ROC-AUC, 88.7\% dropout recall, and 0.889 F1.
 The baseline classified all 442 graduates correctly and missed all 284 dropout cases, showing why we looked at recall alongside accuracy. The enrollment model identified 220 dropout cases, while the first-semester model identified 252. The first semester setup performed better on this test split. Since both the features and the selected model changed, a follow up experiment could use the same algorithm with both feature sets to isolate the effect of adding first semester data.
 
-\section{Feedback and Plans}
+\section{Feedback and Plans}\label{sec:feedback}
 
-Write about your plans for the remainder of the project. This should include a discussion of the feedback you received from your TA, and how you plan to improve your approach. Reflect on your implementation and areas for improvement. Refer to item 6. This may be around 0.5 pages.
+We discussed our project with our TA, \textbf{Yasmin}, who advised us to look closely at anomalies in the data and to choose performance metrics appropriately, weighting the classes so that less frequent classes have more influence.
+The anomaly review produced the findings in Section~\ref{sec:dataset}.
+The class weighting and choice of metrics in Sections~\ref{sec:implementation} and~\ref{sec:results} follow the second suggestion.
+
+Our results so far point to several next steps:
+\begin{itemize}
+  \item \textbf{Enrolled class:} the current models exclude the rarest class (17.9\%).
+    We will train a three-class version, evaluated with macro-averaged F1 and per-class recall.
+  \item \textbf{Decision cutoff:} all models use a fixed cutoff of 0.50.
+    Missing an at-risk student is worse than a false alarm, so we will tune the cutoff on the validation folds and report precision--recall curves.
+  \item \textbf{Hyperparameters:} tree depth, number of trees and the SVM's $C$ are set by hand.
+    We will tune them with cross-validation.
+  \item \textbf{Zero grades:} we will add an indicator for semesters with no evaluated units, so that a 0 is not read as an extremely low grade.
+  \item \textbf{Controlled comparison:} we will train the same algorithm on both feature sets to isolate the effect of first-semester data.
+\end{itemize}
+
+One thing we will do differently is fix the metrics, cutoff and tuning procedure before looking at test results, and use the test set only once, for the final comparison.
 
 \section{Template Notes}
 
