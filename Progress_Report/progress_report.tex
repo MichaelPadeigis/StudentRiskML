@@ -165,11 +165,19 @@ Describe any features you used for your model, or how your data was input to you
 
 \section{Implementation}
 
-Describe your model and implementation here. Refer to item 4. This may take around a page.
+We built a binary classifier to predict whether a student would drop out or graduate. We excluded students who were still enrolled because their final outcomes were not known. We tested two versions using the same train and test split. The enrollment version used 24 features available before semester results. The first-semester version used 30 features by adding six first-semester academic measures.
+We compared four scikit-learn models: logistic regression, a decision tree, a random forest, and a support vector machine (SVM). All four used balanced class weights, giving more weight to dropout cases because they were less common. Each model used a preprocessing pipeline that encoded categorical features and standardized numerical features. We fitted these transformations on the training portion of each fold to keep the validation data separate.
+Logistic regression minimized logistic loss with L2 regularization using the L-BFGS optimizer. The decision tree chose splits that reduced Gini impurity, with a maximum depth of seven and at least 15 examples per leaf. The random forest averaged predictions from 200 trees trained on samples, with each split considering a random subset. The SVM used a radial basis function kernel with C = 1. It learned a decision boundary by balancing the width of the classification margin against penalties for margin violations. We enabled probability estimates so the SVM could produce dropout risk scores.
+For comparison, we used a majority class baseline. The training set contained 1,767 graduates and 1,137 dropouts, so the baseline predicted Graduate for every student in the test set.
 
 \section{Results and Evaluation}\label{sec:results}
 
-How are you evaluating your model? What results do you have so far? What are your baselines? Refer to item 5. This may take around 0.5 pages.
+We split the 3,630 students with known outcomes into 2,904 training examples (80\%) and 726 test examples (20\%). We compared the four models using stratified five fold cross-validation within the training set. For each feature set, we selected the model with the highest mean validation ROC-AUC, trained it on all 2,904 training examples, and evaluated it on the test set. Logistic regression had the highest mean validation ROC-AUC at enrollment (0.848), and the SVM had the highest after the first semester (0.934).
+We treated dropout as the positive class. We used ROC-AUC to measure how well each model ranked dropout cases above graduates across decision thresholds. We used a dropout probability cutoff of 0.50 to calculate accuracy, precision, recall, and F1.
+Majority-class baseline: 60.9\% accuracy, 0.500 ROC-AUC, 0.0\% dropout recall, and 0.000 F1.
+Enrollment logistic regression: 76.4\% accuracy, 0.855 ROC-AUC, 77.5\% dropout recall, and 0.720 F1.
+First-semester SVM: 91.3\% accuracy, 0.956 ROC-AUC, 88.7\% dropout recall, and 0.889 F1.
+The baseline classified all 442 graduates correctly and missed all 284 dropout cases, showing why we looked at recall alongside accuracy. The enrollment model identified 220 dropout cases, while the first-semester model identified 252. The first semester setup performed better on this test split. Since both the features and the selected model changed, a follow up experiment could use the same algorithm with both feature sets to isolate the effect of adding first semester data.
 
 \section{Feedback and Plans}
 
