@@ -169,7 +169,11 @@ The data file (\texttt{data.csv}, about 0.8\,MB) is included in our submission.
 
 \section{Features}\label{sec:features}
 
-Describe any features you used for your model, or how your data was input to your model. Are you doing feature engineering or feature selection? Are you learning embeddings? Is it all part of one neural network? Refer to item 2. This may range from 0.25 pages to 0.5 pages.
+We used two feature sets to compare dropout prediction at enrollment and after the first semester. The enrollment model used 24 features, including demographic information, admission details, previous qualifications, financial indicators and economic conditions. It excluded academic results from both semesters.
+
+The first semester model added six academic measures, giving 30 features. These included curricular units credited, enrolled, evaluated and approved, the semester grade, and units without evaluations. Results from the second semester were excluded from both models.
+
+Categorical features were represented using one hot encoding, while numerical features were standardized. These transformations were fitted within the training folds during cross validation. Feature selection was based on the intended prediction stage. We did not use automatic feature selection or data augmentation.
 
 \section{Implementation}\label{sec:implementation}
 
