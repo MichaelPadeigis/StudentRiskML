@@ -82,13 +82,13 @@ With the rising prevalence of AI use in education, there has been a cause for co
 
 The research paper “Predicting student dropouts with machine learning: An empirical study in Finnish higher education” by Matti Vaarma found the features “accumulated credits”, the “number of failed courses”, and “Moodle activity count” to be the most important features \citep{vaarma2024}. They found that up until 20 months, “number of failed courses” was the most important feature then afterward “accumulated credits” became the most important feature \citep{vaarma2024}. Then the study found that after 41 months, the reliability of all the features fluctuates \citep{vaarma2024}. These fluctuations happen in time intervals shorter than a semester \citep{vaarma2024}. They found that GPA and gender had little importance \citep{vaarma2024}. 
 
-The research paper “Prediction of student dropout using Artificial Intelligence algorithms” by Jairo Martíneza and Dodanim Castillo found that socioeconomic data along with academic data accurately predicts student dropout rates \citep{martínez2024}. Although this study didn’t use any economic data of the student or their parents \citep{martínez2024}. Their model found that using data from just the first was sufficient and that using data from more years only found slight improvements in accuracy \citep{martínez2024}. 
+The research paper “Prediction of student dropout using Artificial Intelligence algorithms” by Jairo Martínez and Dodanim Castillo found that socioeconomic data along with academic data accurately predicts student dropout rates \citep{martínez2024}. However, the study did not use any economic data about the students or their parents \citep{martínez2024}. Their model found that using data from just the first was sufficient and that using data from more years only found slight improvements in accuracy \citep{martínez2024}. 
 
-The research paper “Early Prediction of Student Dropout in Higher Education using Machine Learning Models” by Or Goren, Liron Cohen, and Amir Rubinstein used Learning Management System (LMS) data \citep{goren2024}. LMS tracks student learning activities which includes grades, submission times, forum participation, and more \citep{goren2024}. The researchers divided up their data by looking at the first 4 weeks, then the first 8 weeks, then the first exam period in semester 1, then the second exam period in semester 1 when the final semester 1 grade is available, and then finally they looked at the end of semester 2 data \citep{goren2024}. They found that with more data, the model became more accurate \citep{goren2024}. However, that also means there is less time to intervene when it seems a student may dropout \citep{goren2024}. The researchers also found that the dropout patterns changed depending on the field of study of the students \citep{goren2024}. 
+The research paper “Early Prediction of Student Dropout in Higher Education using Machine Learning Models” by Or Goren, Liron Cohen, and Amir Rubinstein used Learning Management System (LMS) data \citep{goren2024}. LMS tracks student learning activities which includes grades, submission times, forum participation, and more \citep{goren2024}. The researchers divided up their data by looking at the first 4 weeks, then the first 8 weeks, then the first exam period in semester 1, then the second exam period in semester 1 when the final semester 1 grade is available, and then finally they looked at the end of semester 2 data \citep{goren2024}. They found that with more data, the model became more accurate \citep{goren2024}. However, that also means there is less time to intervene when it seems a student may drop out \citep{goren2024}. The researchers also found that the dropout patterns changed depending on the field of study of the students \citep{goren2024}. 
 
 The research paper “Using Big Data to Predict Student Dropouts: Technology Affordances for Research” by David Niemi and Elena Gitin found that declining performance was a good indicator of dropping out and having dependents, being married or in the military reduced the likelihood of dropping out \citep{niemi2012}. They found that being older, and having previous college education or having transfer credits increased risk of dropping out \citep{niemi2012}. 
 
-The research paper “A model for predicting dropout of higher education students” by Anaíle Mendes Rabelo, and Luis Enrique Zárate found that high percentage of cancelled courses, lower number of semesters enrolled, low percentage of courses completed, loss of discounts and scholarships, low GPA were some of the predictive features that collated to higher dropout rates \citep{rabelo2025}. These researchers unlike the previous were also looking to predict when a student might drop. However they found that these features were not useful for predicting that \citep{rabelo2025}.
+The research paper “A model for predicting dropout of higher education students” by Anaíle Mendes Rabelo and Luis Enrique Zárate found that a high percentage of cancelled courses, fewer semesters enrolled, a low percentage of courses completed, loss of discounts and scholarships, and low GPA were among the features that correlated with higher dropout rates \citep{rabelo2025}. Unlike the previous studies, these researchers also tried to predict when a student might drop out. However, they found that these features were not useful for predicting that \citep{rabelo2025}.
 
 \section{Dataset}\label{sec:dataset}
 
@@ -132,7 +132,7 @@ Admission and previous-qualification grades use a 0--200 scale (observed range 9
 
 The target is one of three outcomes: Graduate (2,209; 49.9\%), Dropout (1,421; 32.1\%) or Enrolled (794; 17.9\%).
 The majority-class baseline reaches about 50\% accuracy on the original three class dataset and 60.9\% on our binary test set after excluding Enrolled students.
-We therefore focus on per-class metrics, as described in Section~\ref{sec:results}.
+We therefore report dropout recall, precision and F1 alongside accuracy, as described in Section~\ref{sec:results}.
 
 \subsection{Notable Characteristics}
 
@@ -140,7 +140,6 @@ Following our TA's suggestion to look closely at anomalies, we examined each fea
 
 \begin{itemize}
   \item \textbf{Zero grades:} 718 students have a first-semester grade of 0, and 870 have a second-semester grade of 0.
-    Every one of them also has zero approved units.
     All students with a zero semester grade also had zero approved units, although some had recorded evaluations.
     Among students with a zero first semester grade, approximately 79\% are classified as Dropout, so the feature is highly predictive, but its zero value means something different from the rest of the grade scale.
   \item \textbf{Skewed categoricals:} 97.5\% of students share the same nationality, and 89\% are single.
@@ -179,7 +178,7 @@ Categorical features were represented using one hot encoding, while numerical fe
 
 We built a binary classifier to predict whether a student would drop out or graduate. We excluded students who were still enrolled because their final outcomes were not known. We tested two versions using the same train and test split. The enrollment version used 24 features available before semester results. The first-semester version used 30 features by adding six first-semester academic measures.
 We compared four scikit-learn models: logistic regression, a decision tree, a random forest, and a support vector machine (SVM). All four used balanced class weights, giving more weight to dropout cases because they were less common. Each model used a preprocessing pipeline that encoded categorical features and standardized numerical features. We fitted these transformations on the training portion of each fold to keep the validation data separate.
-Logistic regression minimized logistic loss with L2 regularization using the L-BFGS optimizer. The decision tree chose splits that reduced Gini impurity, with a maximum depth of seven and at least 15 examples per leaf. The random forest averaged predictions from 200 trees trained on samples, with each split considering a random subset. The SVM used a radial basis function kernel with C = 1. It learned a decision boundary by balancing the width of the classification margin against penalties for margin violations. We enabled probability estimates so the SVM could produce dropout risk scores.
+Logistic regression minimized logistic loss with L2 regularization using the L-BFGS optimizer. The decision tree chose splits that reduced Gini impurity, with a maximum depth of seven and at least 15 examples per leaf. The random forest averaged predictions from 200 trees trained on bootstrap samples, with each split considering a random subset. The SVM used a radial basis function kernel with C = 1. It learned a decision boundary by balancing the width of the classification margin against penalties for margin violations. We enabled probability estimates so the SVM could produce dropout risk scores.
 For comparison, we used a majority class baseline. The training set contained 1,767 graduates and 1,137 dropouts, so the baseline predicted Graduate for every student in the test set.
 
 \section{Results and Evaluation}\label{sec:results}
@@ -211,83 +210,11 @@ Our results so far point to several next steps:
 
 We will use cross validation on the training data to tune model settings and select a decision cutoff. We will also compare the same algorithm across both feature sets to isolate the effect of first semester data. These experiments will extend the preliminary results reported here.
 
-\section{Template Notes}
-
-You can remove this section or comment it out, as it only contains instructions for how to use this template. You may use subsections in your document as you find appropriate.
-
-\subsection{Tables and figures}
-
-See Table~\ref{citation-guide} for an example of a table and its caption.
-See Figure~\ref{fig:experiments} for an example of a figure and its caption.
-
-
-\begin{figure}[t]
-  \includegraphics[width=\columnwidth]{example-image-golden}
-  \caption{A figure with a caption that runs for more than one line.
-    Example image is usually available through the \texttt{mwe} package
-    without even mentioning it in the preamble.}
-  \label{fig:experiments}
-\end{figure}
-
-\begin{figure*}[t]
-  \includegraphics[width=0.48\linewidth]{example-image-a} \hfill
-  \includegraphics[width=0.48\linewidth]{example-image-b}
-  \caption {A minimal working example to demonstrate how to place
-    two images side-by-side.}
-\end{figure*}
-
-
-\subsection{Citations}
-
-\begin{table*}
-  \centering
-  \begin{tabular}{lll}
-    \hline
-    \textbf{Output}           & \textbf{natbib command} & \textbf{ACL only command} \\
-    \hline
-    \citep{Gusfield:97}       & \verb|\citep|           &                           \\
-    \citealp{Gusfield:97}     & \verb|\citealp|         &                           \\
-    \citet{Gusfield:97}       & \verb|\citet|           &                           \\
-    \citeyearpar{Gusfield:97} & \verb|\citeyearpar|     &                           \\
-    \citeposs{Gusfield:97}    &                         & \verb|\citeposs|          \\
-    \hline
-  \end{tabular}
-  \caption{\label{citation-guide}
-    Citation commands supported by the style file.
-  }
-\end{table*}
-
-Table~\ref{citation-guide} shows the syntax supported by the style files.
-We encourage you to use the natbib styles.
-You can use the command \verb|\citet| (cite in text) to get ``author (year)'' citations, like this citation to a paper by \citet{Gusfield:97}.
-You can use the command \verb|\citep| (cite in parentheses) to get ``(author, year)'' citations \citep{Gusfield:97}.
-You can use the command \verb|\citealp| (alternative cite without parentheses) to get ``author, year'' citations, which is useful for using citations within parentheses (e.g. \citealp{Gusfield:97}).
-
-\subsection{References}
-
-\nocite{Ando2005,andrew2007scalable,rasooli-tetrault-2015}
-
-Many websites where you can find academic papers also allow you to export a bib file for citation or bib formatted entry. Copy this into the \texttt{custom.bib} and you will be able to cite the paper in the \LaTeX{}. You can remove the example entries.
-
-\subsection{Equations}
-
-An example equation is shown below:
-\begin{equation}
-  \label{eq:example}
-  A = \pi r^2
-\end{equation}
-
-Labels for equation numbers, sections, subsections, figures and tables
-are all defined with the \verb|\label{label}| command and cross references
-to them are made with the \verb|\ref{label}| command.
-This an example cross-reference to Equation~\ref{eq:example}. You can also write equations inline, like this: $A=\pi r^2$.
-
-
 % \section*{Limitations}
 
 \section*{Team Contributions}
 
-Vikash worked on the Introduction, cited 5 previous works related to our tasks, and worked on the ML
+Vikash worked on the Introduction, cited 5 previous works related to our tasks, wrote the Features section, and worked on the ML pipeline.
 Michael developed the ML pipeline, trained and evaluated the models, and wrote Implementation and Results and Evaluation.
 Jack set up the LaTeX report. He explored and preprocessed the dataset and wrote the Dataset section. He also wrote the Feedback and Plans section, as well as helped with the ML pipeline and reviewed the report.
 
