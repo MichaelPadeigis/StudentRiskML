@@ -76,7 +76,7 @@
 
 \section{Introduction}
 
-With the rising prevalence of AI use in education, there has been a cause for concern with regards to the negative impacts it has on students. Studies have shown that by cognitively offloading their thinking and outsourcing their work, students have eroded their mental abilities and have caused significant reduction in brain activity \citep{hogenboom2026}. However, this is not the only way machine learning has to be used in education. By using student information from before enrollment and their performance at the end of term 1 and term 2 to predict their academic performance and dropout rate, machine learning can be used to help students receive any academic aid they need to improve their academic standing.
+With the rising prevalence of AI use in education, there has been a cause for concern with regards to the negative impacts it has on students. Studies have shown that by cognitively offloading their thinking and outsourcing their work, students have eroded their mental abilities and have caused significant reduction in brain activity \citep{hogenboom2026}. However, this is not the only way machine learning has to be used in education. By using student information available at enrollment and after the first semester to predict dropout versus graduation, machine learning can help identify students who may benefit from academic support.
 
 \section{Related Work}
 
@@ -131,7 +131,7 @@ Admission and previous-qualification grades use a 0--200 scale (observed range 9
 \end{table}
 
 The target is one of three outcomes: Graduate (2,209; 49.9\%), Dropout (1,421; 32.1\%) or Enrolled (794; 17.9\%).
-The classes are imbalanced, so a majority-vote classifier already reaches about 50\% accuracy.
+The majority-class baseline reaches about 50\% accuracy on the original three class dataset and 60.9\% on our binary test set after excluding Enrolled students.
 We therefore focus on per-class metrics, as described in Section~\ref{sec:results}.
 
 \subsection{Notable Characteristics}
@@ -141,8 +141,8 @@ Following our TA's suggestion to look closely at anomalies, we examined each fea
 \begin{itemize}
   \item \textbf{Zero grades:} 718 students have a first-semester grade of 0, and 870 have a second-semester grade of 0.
     Every one of them also has zero approved units.
-    A 0 therefore means ``no units passed or evaluated'', not a real score of 0/20.
-    Of this group, 79\% of students are classified as Dropout, so the feature is highly predictive, but its zero value means something different from the rest of the grade scale.
+    All students with a zero semester grade also had zero approved units, although some had recorded evaluations.
+    Among students with a zero first semester grade, approximately 79\% are classified as Dropout, so the feature is highly predictive, but its zero value means something different from the rest of the grade scale.
   \item \textbf{Skewed categoricals:} 97.5\% of students share the same nationality, and 89\% are single.
     Only 51 students have educational special needs.
     Several coded features also have many values (father's occupation has 46 codes, mother's qualification has 29), and many of those codes are rare.
@@ -156,11 +156,11 @@ Following our TA's suggestion to look closely at anomalies, we examined each fea
 
 The raw CSV needed some cleanup before use.
 We removed 73 empty trailing columns left over from the export, stripped a UTF-8 byte-order mark from the first header, and removed a stray tab character from the ``Daytime/evening attendance'' column name.
-We then label-encoded the target (Dropout\,=\,0, Enrolled\,=\,1, Graduate\,=\,2).
+We excluded the 794 Enrolled students because their final outcomes were unknown. This left 3,630 students, with Dropout\,=\,1 and Graduate\,=\,0.
 
 We kept the zero-grade students and the older students.
 Both are real records rather than errors, and the zero-grade group carries a strong dropout signal.
-No rows were removed.
+No additional rows were removed.
 We split the data 80/20 into training and test sets, stratified by class.
 Any scaling or encoding was fit on the training set only, to avoid leaking test data.
 Section~\ref{sec:features} describes how the categorical and numeric features are represented, and Section~\ref{sec:results} describes the evaluation protocol.
@@ -201,11 +201,11 @@ Our results so far point to several next steps:
     Missing an at-risk student is worse than a false alarm, so we will tune the cutoff on the validation folds and report precision--recall curves.
   \item \textbf{Hyperparameters:} tree depth, number of trees and the SVM's $C$ are set by hand.
     We will tune them with cross-validation.
-  \item \textbf{Zero grades:} we will add an indicator for semesters with no evaluated units, so that a 0 is not read as an extremely low grade.
+  \item \textbf{Zero grades:} we will add an indicator for semesters with zero approved units, so that a 0 is not read as an extremely low grade.
   \item \textbf{Controlled comparison:} we will train the same algorithm on both feature sets to isolate the effect of first-semester data.
 \end{itemize}
 
-One thing we will do differently is fix the metrics, cutoff and tuning procedure before looking at test results, and use the test set only once, for the final comparison.
+We will use cross validation on the training data to tune model settings and select a decision cutoff. We will also compare the same algorithm across both feature sets to isolate the effect of first semester data. These experiments will extend the preliminary results reported here.
 
 \section{Template Notes}
 
