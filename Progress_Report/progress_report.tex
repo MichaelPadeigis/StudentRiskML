@@ -199,8 +199,8 @@ The class weighting and choice of metrics in Sections~\ref{sec:implementation} a
 
 Our results so far point to several next steps:
 \begin{itemize}
-  \item \textbf{Enrolled class:} the current models exclude the rarest class (17.9\%).
-    We will train a three-class version, evaluated with macro-averaged F1 and per-class recall.
+  \item \textbf{Enrolled class:} the current models exclude the rarest class (17.9\%) because those students' outcomes are unresolved.
+    For comparison with prior work on this dataset, we will also evaluate a three-class setup with macro-averaged F1 and per-class recall, to show what this exclusion costs.
   \item \textbf{Decision cutoff:} all models use a fixed cutoff of 0.50.
     Missing an at-risk student is worse than a false alarm, so we will tune the cutoff on the validation folds and report precision--recall curves.
   \item \textbf{Hyperparameters:} tree depth, number of trees and the SVM's $C$ are set by hand.
@@ -289,7 +289,7 @@ This an example cross-reference to Equation~\ref{eq:example}. You can also write
 
 Vikash worked on the Introduction, cited 5 previous works related to our tasks, and worked on the ML
 Michael developed the ML pipeline, trained and evaluated the models, and wrote Implementation and Results and Evaluation.
-Jack wrote the Introduction and Feedback and Plans sections, helped with the ML pipeline, and reviewed the report.
+Jack set up the LaTeX report. He explored and preprocessed the dataset and wrote the Dataset section. He also wrote the Feedback and Plans section, as well as helped with the ML pipeline and reviewed the report.
 
 
 % Bibliography entries for the entire Anthology, followed by custom entries
