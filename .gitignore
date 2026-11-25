@@ -19,3 +19,9 @@
 
 # Compiled report (rebuild from progress_report.tex)
 Progress_Report/progress_report.pdf
+
+# Compiled final report (rebuild from final_report.tex)
+Final_Report/final_report.pdf
+
+# Python caches
+__pycache__/
